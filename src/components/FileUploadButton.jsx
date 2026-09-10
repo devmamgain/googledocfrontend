@@ -1,8 +1,9 @@
 import { useRef, useState } from "react";
 import toast from "react-hot-toast";
 import { uploadFile } from "../api/documents";
+import { socket } from "../socket/socket";
 
-export default function FileUploadButton({ onImported }) {
+export default function FileUploadButton({ onImported, documentId }) {
     const inputRef = useRef(null);
     const [loading, setLoading] = useState(false);
 
@@ -24,6 +25,10 @@ export default function FileUploadButton({ onImported }) {
                 .map((p) => `<p>${p.replace(/\n/g, "<br/>")}</p>`)
                 .join("");
             onImported(html || `<p>${data.content || ""}</p>`);
+            socket.emit("send-changes", {
+                documentId,
+                content: html,
+            })
             toast.success("File imported");
         } catch {
             toast.error("Failed to import file");

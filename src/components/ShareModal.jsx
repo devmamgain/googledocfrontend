@@ -5,7 +5,7 @@ import { shareDocument } from "../api/documents";
 export default function ShareModal({ open, onClose, documentId }) {
     const [email, setEmail] = useState("");
     const [loading, setLoading] = useState(false);
-
+    const [role, setRole] = useState("viewer")
     if (!open) return null;
 
     async function handleShare(e) {
@@ -13,7 +13,7 @@ export default function ShareModal({ open, onClose, documentId }) {
         if (!email) return;
         setLoading(true);
         try {
-            await shareDocument(documentId, email);
+            await shareDocument(documentId, email, role);
             toast.success("Document shared successfully.");
             setEmail("");
             onClose();
@@ -55,6 +55,15 @@ export default function ShareModal({ open, onClose, documentId }) {
                             placeholder="john@example.com"
                             className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-100"
                         />
+                    </div>
+                    <div>
+                        <label className="mb-1 block text-sm font-medium text-slate-700">
+                            Role
+                        </label>
+                        <select value={role} onChange={(e) => setRole(e.target.value)}>
+                            <option value={"viewer"}>Viewer</option>
+                            <option value={"editor"}>Editor</option>
+                        </select>
                     </div>
                     <div className="flex justify-end gap-2">
                         <button

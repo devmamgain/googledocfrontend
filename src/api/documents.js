@@ -50,7 +50,24 @@ export async function updateDocumentContent(id, content) {
     );
     return res.data;
 }
+export async function updateDocumentRole(
+    documentId,
+    userId,
+    role
+) {
+    const res = await axios.put(
+        `${UPDATE_DOCUMENT_CONTENT_API}/${documentId}/role`,
+        {
+            userId,
+            role,
+        },
+        {
+            headers: authHeaders(),
+        }
+    );
 
+    return res.data;
+}
 export async function uploadFile(file) {
     const formData = new FormData();
     formData.append("file", file);
@@ -63,10 +80,10 @@ export async function uploadFile(file) {
     return res.data;
 }
 
-export async function shareDocument(id, email) {
+export async function shareDocument(id, email, role) {
     const res = await axios.post(
         `${SHARE_DOCUMENT_API}/${id}/share`,
-        { email },
+        { email, role },
         { headers: authHeaders() }
     );
     return res.data;
